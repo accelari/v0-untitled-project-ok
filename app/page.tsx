@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format, parse, isValid, isAfter, isBefore, addMonths } from "date-fns"
-import { CalendarIcon, HelpCircle, AlertTriangle, Clock, ChevronRight, ChevronLeft } from "lucide-react"
+import { CalendarIcon, HelpCircle, AlertTriangle, Clock, ChevronRight, ChevronLeft, Info } from "lucide-react"
 import { CountrySelect } from "./country-select"
 import { countriesData, getBaseCountryCode } from "./data/countries"
 import { calculateDeadlines } from "./utils/date-calculator"
@@ -427,6 +427,29 @@ export default function TrademarkDeadlineCalculator() {
     setCurrentStep(currentStep - 1)
   }
 
+  // Funktion zum Abrufen des Anmeldungstyps als Text
+  const getFilingTypeText = () => {
+    if (!filingType) return "Direkte Anmeldung"
+
+    switch (filingType) {
+      case "wipo":
+        return "WIPO (Internationale Registrierung)"
+      case "euipo":
+        return "EUIPO (Unionsmarke)"
+      case "aripo":
+        return "ARIPO"
+      case "oapi":
+        return "OAPI"
+      case "boip":
+        return "BOIP (Benelux)"
+      case "gcc":
+        return "GCC"
+      case "direct":
+      default:
+        return "Direkte Anmeldung"
+    }
+  }
+
   // Rendere den aktuellen Schritt
   const renderStep = () => {
     switch (currentStep) {
@@ -594,8 +617,8 @@ export default function TrademarkDeadlineCalculator() {
                 {showApplicationDateWarning && (
                   <Alert variant="destructive" className="mt-3">
                     <AlertDescription className="text-base">
-                      Sind Sie sich sicher, dass Sie ein korrektes Datum eingegeben haben? Das eingegebene Datum liegt
-                      in der Zukunft.
+                      Sind Sie sicher, dass Sie ein korrektes Datum eingegeben haben? Das eingegebene Datum liegt in der
+                      Zukunft.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -645,8 +668,8 @@ export default function TrademarkDeadlineCalculator() {
                 {showRegistrationDateWarning && (
                   <Alert variant="destructive" className="mt-3">
                     <AlertDescription className="text-base">
-                      Sind Sie sich sicher, dass Sie ein korrektes Datum eingegeben haben? Das eingegebene Datum liegt
-                      in der Zukunft.
+                      Sind Sie sicher, dass Sie ein korrektes Datum eingegeben haben? Das eingegebene Datum liegt in der
+                      Zukunft.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -683,6 +706,59 @@ export default function TrademarkDeadlineCalculator() {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Ergebnisse</h2>
 
+            {/* Neue kompakte Übersicht am Anfang */}
+            <Card className="bg-blue-50 dark:bg-blue-900 shadow-md">
+              <CardContent className="p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center">
+                      <Info className="h-4 w-4 text-blue-600 mr-2" />
+                      <span className="font-semibold text-blue-800">Land:</span>
+                    </div>
+                    <div className="ml-6 text-blue-700">
+                      {country?.country} ({country?.code})
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center">
+                      <Info className="h-4 w-4 text-blue-600 mr-2" />
+                      <span className="font-semibold text-blue-800">Anmeldungsart:</span>
+                    </div>
+                    <div className="ml-6 text-blue-700">{getFilingTypeText()}</div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center">
+                      <Info className="h-4 w-4 text-blue-600 mr-2" />
+                      <span className="font-semibold text-blue-800">Berechnungsbasis:</span>
+                    </div>
+                    <div className="ml-6 text-blue-700">
+                      {filingType === "wipo"
+                        ? "Eintragungsdatum (WIPO)"
+                        : country?.calculationBasis === "application"
+                          ? "Anmeldedatum"
+                          : "Eintragungsdatum"}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center">
+                      <Info className="h-4 w-4 text-blue-600 mr-2" />
+                      <span className="font-semibold text-blue-800">Datum:</span>
+                    </div>
+                    <div className="ml-6 text-blue-700">
+                      {filingType === "wipo"
+                        ? registrationDateInput
+                        : country?.calculationBasis === "application"
+                          ? applicationDateInput
+                          : registrationDateInput}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Aktueller Zyklus */}
             <Card className="bg-gray-50 dark:bg-gray-900 shadow-md">
               <CardContent className="p-4">
@@ -704,12 +780,12 @@ export default function TrademarkDeadlineCalculator() {
             {isFirstFiling === "yes" && country?.calculationBasis === "application" && results.currentCycle === 1 && (
               <Card className="bg-blue-50 dark:bg-blue-900 shadow-md">
                 <CardContent className="p-4">
-                  <div className="text-base font-semibold text-blue-800 dark:text-blue-200">Prioritätsfrist</div>
-                  <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                    Die Prioritätsfrist für Anmeldungen in anderen Ländern endet am {calculatePriorityDeadline()?.date}{" "}
-                    ({calculatePriorityDeadline()?.months} Monate nach{" "}
-                    {country.calculationBasis === "application" ? "Anmeldedatum" : "Eintragungsdatum"})
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <div className="text-base font-semibold text-blue-800 dark:text-blue-200">Prioritätsfrist:</div>
+                    <div className="text-base font-bold text-blue-700 dark:text-blue-300">
+                      {calculatePriorityDeadline()?.date}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             )}

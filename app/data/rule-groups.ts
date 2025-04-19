@@ -245,17 +245,9 @@ export const ruleGroups: Record<string, RuleGroup> = {
     calculationBasis: "application",
     protectionPeriod: 10,
     renewalPeriod: 10,
-    renewalStartMonths: 12,
+    renewalStartMonths: 12, // 12 Monate vor Ablauf
     renewalDeadlineMonths: 0,
-    lateRenewalMonths: 3,
-    usageProofRequired: false,
-    usageProofYears: 0,
-    usageDeclarationRequired: false,
-    usageDeclarationYears: [],
-    vertreterRequired: "Ja",
-    prufungsumfang: "Umfassend",
-    widerspruch: "Ja",
-    priorityDeadlineMonths: 6,
+    lateRenewalMonths: 6, // Geändert von 3 auf 6 Monate Nachfrist
   },
 
   ZA: {

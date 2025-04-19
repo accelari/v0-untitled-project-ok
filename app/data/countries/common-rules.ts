@@ -648,11 +648,12 @@ export const sixMonthsLateRenewalCountries = [
   ...tenYearTermCountries,
   ...sevenYearTermCountries,
   ...fifteenYearTermCountries,
+  "AE", // Vereinigte Arabische Emirate - explizit hinzugefügt
 ]
 
 // 5.2 Länder mit 3-monatiger Nachfrist
 export const threeMonthsLateRenewalCountries = [
-  "AE", // Vereinigte Arabische Emirate
+  // "AE", // Vereinigte Arabische Emirate - entfernt, da jetzt 6 Monate
 ]
 
 // 5.3 Länder mit 12-monatiger Nachfrist
@@ -1398,7 +1399,7 @@ export function getRenewalPeriods(countryCode: string): RenewalPeriods {
     AE: {
       renewalStartMonths: 12, // 12 Monate vor Ablauf
       renewalDeadlineMonths: 0,
-      lateRenewalMonths: 3, // Nur 3 Monate Nachfrist
+      lateRenewalMonths: 6, // Geändert von 3 auf 6 Monate Nachfrist
     },
     BR: {
       renewalStartMonths: 12, // 12 Monate vor Ablauf
