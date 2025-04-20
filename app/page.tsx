@@ -36,6 +36,9 @@ import {
 // Importiere die Funktionen aus common-rules.ts
 import { getUsageProofRequirement, getUsageDeclarationRequirement } from "./data/countries/common-rules"
 
+// Importiere die AIVerification-Komponente am Anfang der Datei
+import { AIVerification } from "./components/ai-verification"
+
 export default function TrademarkDeadlineCalculator() {
   // Schritte im Formular
   const [currentStep, setCurrentStep] = useState(1)
@@ -1102,6 +1105,7 @@ export default function TrademarkDeadlineCalculator() {
                 </CardContent>
               </Card>
             )}
+            {results && <AIVerification calculationResults={results} />}
           </div>
         )
 

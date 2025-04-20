@@ -63,7 +63,9 @@
     "node-gyp": "latest",
     "next-auth": "latest",
     "sqlite3": "latest",
-    "sqlite": "latest"
+    "sqlite": "latest",
+    "ai": "latest",
+    "@ai-sdk/anthropic": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
