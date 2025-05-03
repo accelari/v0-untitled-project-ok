@@ -30,7 +30,8 @@ export async function verifyWithAI(
 ): Promise<VerifyResponse> {
   try {
     // Prüfen, ob ein API-Schlüssel vorhanden ist
-    if (!process.env.ANTHROPIC_API_KEY && !apiKey) {
+    const effectiveApiKey = apiKey || process.env.ANTHROPIC_API_KEY
+    if (!effectiveApiKey) {
       return {
         success: false,
         errorType: "API_KEY_MISSING",
@@ -61,7 +62,7 @@ export async function verifyWithAI(
 
     // Sende den Prompt an die Claude API mit dem übergebenen API-Schlüssel
     const { text } = await generateText({
-      model: anthropic(modelName, apiKey || process.env.ANTHROPIC_API_KEY),
+      model: anthropic(modelName, effectiveApiKey),
       prompt: prompt,
       temperature: 0.3, // Niedrigere Temperatur für präzisere Antworten
       maxTokens: 1500,

@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Marken-Fristenrechner",
   description: "Berechnen Sie wichtige Fristen für Ihre Markenanmeldung in verschiedenen Ländern",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({

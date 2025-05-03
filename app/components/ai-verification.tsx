@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Bot, AlertTriangle } from "lucide-react"
+import { Loader2, Bot, AlertTriangle, CheckCircle } from "lucide-react"
 import { verifyWithAI, type ClaudeModel } from "../actions/verify-with-ai"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -153,7 +153,7 @@ export function AIVerification({ calculationResults }: AIVerificationProps) {
       )}
 
       {/* API-Schlüssel Eingabe */}
-      {showApiKeyInput && (
+      {showApiKeyInput && !process.env.ANTHROPIC_API_KEY && (
         <div className="space-y-2">
           <Label htmlFor="apiKey">Claude API-Schlüssel</Label>
           <Input
@@ -168,6 +168,16 @@ export function AIVerification({ calculationResults }: AIVerificationProps) {
             Ihr API-Schlüssel wird nur für diese Anfrage verwendet und nicht gespeichert.
           </p>
         </div>
+      )}
+
+      {process.env.ANTHROPIC_API_KEY && (
+        <Alert className="bg-green-50 border-green-200 text-green-800 mt-2">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4" />
+            <AlertTitle>API-Schlüssel konfiguriert</AlertTitle>
+          </div>
+          <AlertDescription>Der Anthropic API-Schlüssel ist in den Umgebungsvariablen konfiguriert.</AlertDescription>
+        </Alert>
       )}
 
       {/* Überprüfungs-Button */}
